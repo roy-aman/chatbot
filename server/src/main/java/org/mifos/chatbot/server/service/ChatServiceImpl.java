@@ -42,7 +42,7 @@ public class ChatServiceImpl {
         Intent intent = findIntent(tracker);
         return classifyIntent(botResponse, intent, tracker);
     }
-    public String getResponse(String message) throws IOException {
+    public Response getResponse(String message) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/json");
@@ -57,7 +57,7 @@ public class ChatServiceImpl {
         if(response.code() != 200) {
             //TODO handle exception
         }
-        return response.message();
+        return response;
     }
 
     public String classifyIntent(String botResponse, Intent intent, Tracker tracker) {

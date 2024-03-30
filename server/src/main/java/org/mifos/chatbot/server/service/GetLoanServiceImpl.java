@@ -1,5 +1,6 @@
 package org.mifos.chatbot.server.service;
 
+import okhttp3.Response;
 import org.mifos.chatbot.server.config.openFeign.Response.*;
 import org.mifos.chatbot.server.model.LoanAccount;
 import org.mifos.chatbot.server.model.LoanAccounts;

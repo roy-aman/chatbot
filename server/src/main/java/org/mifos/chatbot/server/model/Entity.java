@@ -1,4 +1,5 @@
 package org.mifos.chatbot.server.model;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
