@@ -1,10 +1,15 @@
-package org.mifos.chatbot.server.config.openFeign.Response;
+package org.mifos.chatbot.server.server.config.openFeign.Response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.mifos.chatbot.server.config.openFeign.Response.Delinquent;
+import org.mifos.chatbot.server.config.openFeign.Response.DisbursementDetail;
+import org.mifos.chatbot.server.config.openFeign.Response.RepaymentSchedule;
+import org.mifos.chatbot.server.config.openFeign.Response.Timeline;
+import org.mifos.chatbot.server.config.openFeign.Response.Transaction;
 
 import java.util.List;
 

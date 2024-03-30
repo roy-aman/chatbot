@@ -1,4 +1,4 @@
-package org.mifos.chatbot.server;
+package org.mifos.chatbot.server.server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;

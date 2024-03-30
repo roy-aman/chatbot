@@ -1,4 +1,4 @@
-package org.mifos.chatbot.server.config.openFeign;
+package org.mifos.chatbot.server.server.config.openFeign;
 
 import org.mifos.chatbot.server.request.PostAuthenticationRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "fineract-provider", url = "https://gsoc.mifos.community/fineract-provider/api")
+@FeignClient(name = "fineract-provider", url = "https://192.168.250.150:8443/fineract-provider/api")
 @Component
 public interface FineractServiceOpenFeign {
 
@@ -15,13 +15,17 @@ public interface FineractServiceOpenFeign {
     ResponseEntity<String> authenticate(@RequestBody PostAuthenticationRequest request, @RequestParam String tenantIdentifier);
 
     @GetMapping(value = "/v1/clients/{clientId}/accounts", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<String> getClient(@PathVariable Integer clientId, @RequestParam String tenantIdentifier,
+    ResponseEntity<String> getClient(@PathVariable Integer clientId, @RequestHeader("Fineract-Platform-Tenantid") String tenantIdentifier,
                                      @RequestHeader("Authorization") String authorization);
 
     @GetMapping(value = "/v1/loans/{loanId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> getLoans(@PathVariable Integer loanId, @RequestParam String associations,
-                                    @RequestParam String exclude, @RequestParam String tenantIdentifier,
+                                    @RequestParam String exclude, @RequestParam("Fineract-Platform-Tenantid") String tenantIdentifier,
                                     @RequestHeader("Authorization") String authorization);
+
+    @PostMapping(value = "/v2/clients/search", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<String> getClientCount(@RequestBody String requestbody, @RequestHeader("Fineract-Platform-Tenantid") String tenantIdentifier,
+                                          @RequestHeader("Authorization") String authorization);
 
     @GetMapping(value = "/v1/clients/{clientId}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<String> getClientInfo(@PathVariable Integer clientId, @RequestParam String tenantIdentifier,

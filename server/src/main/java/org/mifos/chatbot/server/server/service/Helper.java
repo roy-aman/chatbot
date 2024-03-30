@@ -1,4 +1,4 @@
-package org.mifos.chatbot.server.service;
+package org.mifos.chatbot.server.server.service;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,18 +6,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.mifos.chatbot.server.model.Intent;
 import org.mifos.chatbot.server.model.LatestMessage;
 import org.mifos.chatbot.server.model.Tracker;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Slf4j
 public class Helper {
     public JsonObject createJSON(String string) {
-        return new JsonParser().parse(string).getAsJsonObject();
+        Gson gson = new Gson();
+//        log.info(string);
+        JsonObject jsonObject = gson.fromJson(string, JsonObject.class);
+        return jsonObject;
     }
 
     public String createJSONRequest(String string) throws JsonProcessingException {
@@ -37,11 +44,18 @@ public class Helper {
                 key -> {
                     if (key.equals("sender_id"))
                         tracker.setConversationId(obj.get("sender_id").toString());
-                    else if (key.equals("slots"))
-                        tracker.setSlots(null);
-                    else if (key.equals("latest_message"))
+                    else if (key.equals("slots")) {
+                        Map<String, String> map = new HashMap<>();
+                        JsonObject slotObject = obj.getAsJsonObject("slots");
+                        slotObject.keySet().stream().forEach(k -> {
+                            if (!slotObject.get(k).isJsonNull())
+                                map.put(k, slotObject.get(k).getAsString());
+                        });
+                        tracker.setSlots(map);
+                    } else if (key.equals("latest_message")) {
+                        log.info(obj.get("latest_message").toString());
                         tracker.setLatestMessage(constructLatestMessage(obj.get("latest_message")));
-                    else if (key.equals("latest_event_time"))
+                    } else if (key.equals("latest_event_time"))
                         tracker.setLatestEventTime(null);
                     else if (key.equals("followup_action"))
                         tracker.setFollowupAction(obj.get("followup_action").toString());
@@ -64,6 +78,7 @@ public class Helper {
 
     private LatestMessage constructLatestMessage(JsonElement obj) {
         JsonObject jsonObject = obj.getAsJsonObject();
+        log.info(jsonObject.toString());
         return LatestMessage.builder()
                 .intent(constructIntents(jsonObject))
                 .entity(null)

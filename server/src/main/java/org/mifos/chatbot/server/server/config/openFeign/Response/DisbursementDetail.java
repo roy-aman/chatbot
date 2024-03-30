@@ -1,4 +1,4 @@
-package org.mifos.chatbot.server.config.openFeign.Response;
+package org.mifos.chatbot.server.server.config.openFeign.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
